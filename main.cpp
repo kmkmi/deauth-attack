@@ -114,6 +114,8 @@ int main(int argc, char* argv[]) {
 
     pcap_close(handle);
 
+    free(packet[0]);
+    free(packet[1]);
 
 
 
