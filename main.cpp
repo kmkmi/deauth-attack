@@ -39,7 +39,7 @@ char* hex(u_int8_t *addr, char* buf, int size)
 
 
 
-deauth_packet* getDeauthPacket(Mac apMac,  Mac stMac){
+deauth_packet* getDeauthPacket(Mac srcMac,  Mac dstMac){
 
     deauth_packet* dpkt = (deauth_packet*)malloc(sizeof(deauth_packet));
     dpkt->rtap.header_revision = 0x0;
@@ -51,9 +51,9 @@ deauth_packet* getDeauthPacket(Mac apMac,  Mac stMac){
 
     dpkt->dot11_frame.frame_control_field.init(0xc000);
     dpkt->dot11_frame.duration = htons(0x3a01);
-    dpkt->dot11_frame.mac1 = stMac;
-    dpkt->dot11_frame.mac2 = apMac;
-    dpkt->dot11_frame.mac3 = apMac;
+    dpkt->dot11_frame.mac1 = dstMac;
+    dpkt->dot11_frame.mac2 = srcMac;
+    dpkt->dot11_frame.mac3 = srcMac;
     dpkt->dot11_frame.fragment_number = 0b0;
     dpkt->dot11_frame.sequence_number = 0b0;
 
